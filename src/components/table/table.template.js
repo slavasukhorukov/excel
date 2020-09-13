@@ -11,16 +11,16 @@ export function createTable(rowsCount = 20) {
       .map(toColumn)
       .join('')
   ;
-  const cells = new Array(colsCount)
-      .fill('')
-      .map(toCell)
-      .join('')
-  ;
 
   const rows = [];
   rows.push(createRow(cols));
-  for (let i = 0; i < rowsCount; i++) {
-    rows.push(createRow(cells, i + 1));
+  for (let rowNum = 0; rowNum < rowsCount; rowNum++) {
+    const cells = new Array(colsCount)
+        .fill('')
+        .map(toCell(rowNum))
+        .join('')
+    ;
+    rows.push(createRow(cells, rowNum + 1));
   }
 
   return rows.join('');
@@ -50,8 +50,17 @@ function toColumn(col, index) {
   `;
 }
 
-function toCell(_, colNum) {
-  return `<div class="cell" contenteditable data-col="${colNum}"></div>`;
+function toCell(rowNum) {
+  return function(_, colNum) {
+    return `
+      <div class="cell" 
+        contenteditable 
+        data-col="${colNum}"
+        data-type="cell"
+        data-id="${rowNum}:${colNum}"
+      ></div>
+    `;
+  };
 }
 
 function toChar(_, index) {

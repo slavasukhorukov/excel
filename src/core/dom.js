@@ -13,6 +13,17 @@ class Dom {
     return this.$nativeElement.outerHTML.trim();
   }
 
+  text(text) {
+    if (typeof text === 'string') {
+      this.$nativeElement.textContent = text;
+      return this;
+    }
+    if (this.$nativeElement.tagName.toLocaleLowerCase() === 'input') {
+      return this.$nativeElement.value.trim();
+    }
+    return this.$nativeElement.textContent.trim();
+  }
+
   clear() {
     this.html();
     return this;
@@ -54,10 +65,27 @@ class Dom {
     return this.$nativeElement.querySelectorAll(selector);
   }
 
+  find(selector) {
+    return $(this.$nativeElement.querySelector(selector));
+  }
+
   css(styles = {}) {
     Object.keys(styles).forEach((key) => {
       this.$nativeElement.style[key] = styles[key];
     });
+  }
+
+  addClass(className) {
+    this.$nativeElement.classList.add(className);
+  }
+
+  removeClass(className) {
+    this.$nativeElement.classList.remove(className);
+  }
+
+  focus() {
+    this.$nativeElement.focus();
+    return this;
   }
 }
 
