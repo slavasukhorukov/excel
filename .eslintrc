@@ -8,7 +8,8 @@
   "rules": {
     "require-jsdoc": "off",
     "operator-linebreak": "off",
-    "arrow-parens": "off"
+    "arrow-parens": "off",
+    "no-debugger": "off"
   },
   "extends": [
     "eslint:recommended",

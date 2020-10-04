@@ -14,7 +14,7 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text !== 'undefined') {
       this.$nativeElement.textContent = text;
       return this;
     }
@@ -61,6 +61,14 @@ class Dom {
     return this.$nativeElement.dataset;
   }
 
+  attr(name, value) {
+    if (value) {
+      this.$nativeElement.setAttribute(name, value);
+      return this;
+    }
+    return this.$nativeElement.getAttribute(name);
+  }
+
   findAll(selector) {
     return this.$nativeElement.querySelectorAll(selector);
   }
@@ -73,6 +81,15 @@ class Dom {
     Object.keys(styles).forEach((key) => {
       this.$nativeElement.style[key] = styles[key];
     });
+  }
+
+  getStyles(styles = []) {
+    // как вариант можно переписать на обычный forEach с проверкой,
+    // чтобы не было пустых значений
+    return styles.reduce((res, s) => {
+      res[s] = this.$nativeElement.style[s];
+      return res;
+    }, {});
   }
 
   addClass(className) {

@@ -1,4 +1,7 @@
+import {createHeader} from '@/components/header/header.template';
 import {BaseComponent} from '@core/BaseComponent';
+import * as actions from '@/store/actions';
+import {debounce} from '@core/utils';
 
 export class Header extends BaseComponent {
   static className = 'excel__header';
@@ -6,21 +9,22 @@ export class Header extends BaseComponent {
   constructor($root, options) {
     super($root, {
       name: 'Header',
+      listeners: ['input'],
       ...options,
     });
   }
 
+  prepare() {
+    this.onInput = debounce(this.onInput, 300);
+  }
+
+  onInput(event) {
+    this.$dispatch(actions.changeDocumentTitle({
+      title: event.target.value,
+    }));
+  }
+
   toHTML() {
-    return `
-      <input type="text" class="input" value="Новая таблица" />
-      <div>
-          <div class="button">
-              <i class="material-icons">delete</i>
-          </div>
-          <div class="button">
-              <i class="material-icons">exit_to_app</i>
-          </div>
-      </div>
-    `;
+    return createHeader(this.store.getState());
   }
 }
