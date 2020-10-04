@@ -8,6 +8,7 @@ export class Formula extends BaseComponent {
     super($root, {
       name: 'Formula',
       listeners: ['input', 'keydown'],
+      observedStates: ['currentText'],
       ...options,
     });
     this.setText = this.setText.bind(this);
@@ -15,16 +16,18 @@ export class Formula extends BaseComponent {
 
   init() {
     super.init();
-
     this.$formula = this.$root.find('#formula');
-
-    this.$on('table:select', this.setText);
-
-    this.$on('table:input', this.setText);
+    this.$on('table:select', $cell => {
+      this.setText($cell.data.value || $cell.text());
+    });
   }
 
-  setText($cell) {
-    this.$formula.text($cell.text());
+  setText(text) {
+    this.$formula.text(text);
+  }
+
+  storeChanged({currentText}) {
+    this.setText(currentText);
   }
 
   toHTML() {

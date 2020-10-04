@@ -5,6 +5,8 @@ export class BaseComponent extends DomListener {
     super($root, options.listeners);
     this.name = options.name || '';
     this.emitter = options.emitter;
+    this.store = options.store;
+    this.observedStates = options.observedStates || [];
     this.unsubscribers = [];
     this.prepare();
   }
@@ -31,5 +33,15 @@ export class BaseComponent extends DomListener {
   $on(eventName, fn) {
     const unsubFn = this.emitter.subscribe(eventName, fn);
     this.unsubscribers.push(unsubFn);
+  }
+
+  $dispatch(action) {
+    this.store.dispatch(action);
+  }
+
+  storeChanged(changes) {}
+
+  isWatching(stateKey) {
+    return this.observedStates.includes(stateKey);
   }
 }

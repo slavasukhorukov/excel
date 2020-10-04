@@ -14,5 +14,6 @@
 
   .button {
     @include button(green);
+    user-select: none;
   }
 }
